@@ -1,0 +1,20 @@
+$theme: #fec132;
+$themeBg: #f7f7f7;
+$grey-light: #efefef;
+$white: #fff;
+$black: #000;
+$dark-grey: #707070;
+
+$zero-grey: #a4a4a4;
+$border-color: #e5e5e5;
+$table-striped-grey: #f9f9f9;
+$table-border: #dddddd;
+$table-row-hover: #f5f5f5;
+$link: #4990e2;
+
+
+// the :export directive is the magic sauce for webpack
+:export {
+  theme: $theme;
+  themeBg: $themeBg;
+}

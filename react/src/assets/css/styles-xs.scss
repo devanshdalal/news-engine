@@ -1,0 +1,62 @@
+@import "colors";
+
+// mobile view - corresponds to bootstrap xs devices
+@media (max-width: 767px) {
+  .Profile {
+    margin: 0px 10%;
+  }
+}
+
+@media (max-width: 639px) {
+  .Home {
+    padding: 0;
+  }
+  .team-name {
+    width: 250px;
+  }
+  .venue {
+    width: 250px;
+  }
+  .Profile {
+    margin: 0;
+  }
+}
+
+// small mobile
+@media (max-width: 430px) {
+  .app-container {
+    width: 95%;
+  }
+  .Home_header .title {
+    margin: 0;
+  }
+  .Home_body_container {
+    justify-content: space-between;
+  }
+  .Home {
+    padding: 0;
+    .team-name {
+      width: 150px;
+    }
+    .venue {
+      width: 150px;
+    }
+  }
+  .ItemDetail_body {
+    padding: 10px;
+    .title {
+      margin-bottom: 20px;
+    }
+    &_row {
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+// ipad targeting
+@media (min-width: 768px) and (max-width: 991px) {
+  .Profile {
+    margin: 0px 20%;
+  }
+}
