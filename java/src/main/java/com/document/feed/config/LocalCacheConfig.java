@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LocalCacheConfig {
 
-  private static String CACHE = "persistent-cache";
+  private static final String CACHE = "persistent-cache";
 
   @Bean(destroyMethod = "close")
   public CacheManager cacheManager() {

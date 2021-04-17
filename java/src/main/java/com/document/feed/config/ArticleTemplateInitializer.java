@@ -1,6 +1,7 @@
 package com.document.feed.config;
 
 import com.document.feed.model.Article;
+import com.document.feed.util.IndexUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class ArticleTemplateInitializer {
-  public static final String TEMPLATE_NAME = "article-template";
-  public static final String INDEX_NAME = "article";
-  public static final String TEMPLATE_PATTERN = INDEX_NAME + "-*";
 
   private final ReactiveElasticsearchOperations operations;
 
@@ -25,7 +23,7 @@ public class ArticleTemplateInitializer {
   public void setup() {
     var indexOps = operations.indexOps(Article.class);
     indexOps
-        .existsTemplate(TEMPLATE_NAME)
+        .existsTemplate(IndexUtils.TEMPLATE_NAME)
         .subscribe(
             exists -> {
               if (!exists) {
@@ -40,7 +38,8 @@ public class ArticleTemplateInitializer {
                 mapping.subscribe(
                     document -> {
                       var request =
-                          PutTemplateRequest.builder(TEMPLATE_NAME, TEMPLATE_PATTERN)
+                          PutTemplateRequest.builder(
+                                  IndexUtils.TEMPLATE_NAME, IndexUtils.TEMPLATE_PATTERN)
                               .withMappings(document)
                               .withAliasActions(aliasActions)
                               .build();

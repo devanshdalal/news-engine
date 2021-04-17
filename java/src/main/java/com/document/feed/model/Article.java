@@ -1,6 +1,6 @@
 package com.document.feed.model;
 
-import com.document.feed.config.ArticleTemplateInitializer;
+import com.document.feed.util.IndexUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = ArticleTemplateInitializer.INDEX_NAME, createIndex = false)
+@Document(indexName = IndexUtils.INDEX_NAME, createIndex = false)
 @RequiredArgsConstructor
 @Data
 // @JsonInclude(JsonInclude.Include.NON_NULL)

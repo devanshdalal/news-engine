@@ -1,8 +1,7 @@
 package com.document.feed.model;
 
-import com.document.feed.config.ArticleTemplateInitializer;
+import com.document.feed.util.IndexUtils;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -35,17 +34,7 @@ public class ArticleRepositoryMultiIndexImpl implements ArticleRepositoryMultiIn
   }
 
   private IndexCoordinates indexName() {
-    var indexName =
-        ArticleTemplateInitializer.INDEX_NAME
-            + "-"
-            + LocalDateTime.now()
-                .truncatedTo(ChronoUnit.HOURS)
-                .toString()
-                .replace(':', '-')
-
-
-            
-                .toLowerCase();
+    var indexName = IndexUtils.INDEX_NAME + "-" + IndexUtils.timeToText(LocalDateTime.now());
     return IndexCoordinates.of(indexName);
   }
 }

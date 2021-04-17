@@ -18,15 +18,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class NewsClient {
-  private static final String DEFAULT_LANGUAGE = "en";
-  private static final int DEFAULT_PAGESIZE = 100;
-  private static String TOO_MANY_REQUESTS = "too many requests";
+  private static final String TOO_MANY_REQUESTS = "too many requests";
   private final Cache<String, ArticleResponse> cache;
 
   private NewsApiClient newsApiClient;
 
   @Value("${newsapi.key}")
   private String[] apiKey;
+
+  @Value("${news_client.cache}")
+  private boolean cacheEnabled;
 
   private int ind = -1;
 
@@ -39,7 +40,7 @@ public class NewsClient {
     var key =
         key(request.getCategory(), request.getCountry(), request.getPage(), request.getPageSize());
     log.info("headlines key: {}", key);
-    if (cache.containsKey(key)) {
+    if (cacheEnabled && cache.containsKey(key)) {
       callback.onSuccess(cache.get(key));
       return;
     }
@@ -49,7 +50,9 @@ public class NewsClient {
             new NewsApiClient.ArticlesResponseCallback() {
               @Override
               public void onSuccess(ArticleResponse response) {
-                cache.put(key, response);
+                if (cacheEnabled) {
+                  cache.put(key, response);
+                }
                 callback.onSuccess(response);
               }
 
@@ -68,7 +71,7 @@ public class NewsClient {
   public void getEverything(EverythingRequest request, ArticlesResponseCallback callback) {
     var key = key(request.getQ(), request.getPage(), request.getPageSize(), request.getSortBy());
     log.info("everything key: {}", key);
-    if (cache.containsKey(key)) {
+    if (cacheEnabled && cache.containsKey(key)) {
       callback.onSuccess(cache.get(key));
       return;
     }
@@ -78,6 +81,9 @@ public class NewsClient {
             new NewsApiClient.ArticlesResponseCallback() {
               @Override
               public void onSuccess(ArticleResponse response) {
+                if (cacheEnabled) {
+                  cache.put(key, response);
+                }
                 callback.onSuccess(response);
               }
 
@@ -115,6 +121,15 @@ public class NewsClient {
   }
 
   private String key(String... token) {
-    return Arrays.stream(token).filter(Objects::nonNull).reduce("", (s, s1) -> s + "." + s1);
+    return Arrays.stream(token)
+        .filter(Objects::nonNull)
+        .reduce(
+            "",
+            (s, s1) -> {
+              if (s.isEmpty()) {
+                return s1;
+              }
+              return s + "." + s1;
+            });
   }
 }
