@@ -10,7 +10,6 @@ import com.kwabenaberko.newsapilib.models.response.ArticleResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,16 +23,10 @@ public class NewsService {
   private static final String DEFAULT_LANGUAGE = "en";
   private static final int DEFAULT_PAGESIZE = 100;
   private static final List<String> CATEGORIES =
-      List.of(
-          "business" /*, "entertainment", "general", "health", "science", "sports", "technology"*/);
-  private static final List<String> COUNTRIES = List.of("in" /*, "us", "gb", "au", "ru", "fr"*/);
-  private static int PAGE_SIZE = 100;
-  // "You have made too many requests recently. Developer accounts are limited to 100 requests over
-  // a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you
-  // need more requests."
-  private static String TOO_MANY_REQUESTS = "too many requests";
+      List.of("business", "entertainment", "general", "health", "science", "sports", "technology");
+  private static final List<String> COUNTRIES = List.of("in", "us", "gb", "au", "ru", "fr");
   private final NewsClient newsClient;
-  private ExecutorService es = Executors.newSingleThreadExecutor();
+  private final ExecutorService executorService;
 
   public Mono<ArticleResponse> mimicNewsAPIOrg(String path, Map<String, String> queryParams) {
     switch (path) {
@@ -114,7 +107,7 @@ public class NewsService {
                                 .country(country)
                                 .category(category)
                                 .build();
-                        es.execute(
+                        executorService.execute(
                             () -> {
                               newsClient.getTopHeadlines(
                                   request,
