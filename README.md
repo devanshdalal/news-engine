@@ -40,7 +40,7 @@ The TF-IDF vector based similarity is used in recommendations. It is a very simp
 
 ## Database ER representation
 
-![er.png](java/er.png)
+![er.png](er.png)
 
 ## References
 1. https://towardsdatascience.com/tf-idf-for-document-ranking-from-scratch-in-python-on-real-world-dataset-796d339a4089
